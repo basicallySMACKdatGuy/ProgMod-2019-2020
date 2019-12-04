@@ -1,2 +1,56 @@
 #Kast all kode dere tenker kan være relevant inn her. Helst med kommentar
 print("Geitespill og sånt")
+
+
+
+
+
+
+Her starter denn koden
+
+# Importerer nødvendig stuff
+import pygame
+from pygame.locals import *
+import os
+import sys
+
+pygame.init()  #Setter i gang greia, med en klokke til å adde tick rate senere
+CLOCK = pygame.time.Clock()
+W, H = 1280, 640
+win = pygame.display.set_mode((W,H))
+pygame.display.set_caption('Side Scroller')
+FPS = 300000
+
+#Henter bakgrunnen
+bg = pygame.image.load(r'C:\Users\marti\OneDrive\Bilder\Saved Pictures\Spillbakgrunn.png') #NB! Bilder må hentes med egne lokaliseringer
+bg_t = pygame.transform.scale(bg, (W, H)) #Skalerer bakgrunnen til å passe størrelsen på vinduet
+
+#henter geita
+spiller = pygame.image.load(r'C:\Users\marti\OneDrive\Bilder\Saved Pictures\Geit.png')
+spiller_t = pygame.transform.scale(spiller, (145,144)) #skalerer geita
+spillerx =250
+spillery = 423
+
+x=0
+
+#Game loop
+while True:
+    for event in pygame.event.get():
+            
+        if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+
+    
+    rel_x = x % bg_t.get_rect().width  #Gjør noe stuff
+    win.blit(bg, (rel_x - bg_t.get_rect().width, 0))  #Setter inn bakgrunnen
+    win.blit(spiller_t, (spillerx, spillery)) #Setter inn geita på bakgrunnen
+    if rel_x < W:
+        win.blit(bg, (rel_x, 0))  #Får bakgrunnen til å repetere seg når den går ut
+        win.blit(spiller_t, (spillerx, spillery)) #får geita til å bli stående over bakgrunnen når den looper
+    x -= 10  # farten på bakgrunnen
+    
+    pygame.display.update()
+    CLOCK.tick(FPS)  #Tick raten og hvor raskt tida går, og fps
+    
+    Her slutter den
