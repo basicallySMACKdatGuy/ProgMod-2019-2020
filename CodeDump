@@ -51,3 +51,87 @@ while True:
     CLOCK.tick(FPS)  #Tick raten og hvor raskt tida går, og fps
 
     Her slutter den
+    
+    
+    
+    
+    
+    
+    import pygame
+from pygame.locals import *
+import os
+import sys
+
+
+
+W, H = 1280, 640
+
+pygame.display.set_caption('Side Scroller')
+FPS = 60
+
+bg = pygame.image.load(r'C:\Users\Merete\Pictures\Saved Pictures\Spillbakgrunn.png')
+bg_t = pygame.transform.scale(bg, (W, H))
+Geit = pygame.image.load(r'C:\Users\Merete\OneDrive\Bilder\Saved Pictures\Geit.png')
+Geit_1 = pygame.image.load(r'C:\Users\Merete\OneDrive\Bilder\Saved Pictures\Geit_1.png')
+Geit_2 = pygame.image.load(r'C:\Users\Merete\OneDrive\Bilder\Saved Pictures\Geit_2.png')
+Geit_3 = pygame.image.load(r'C:\Users\Merete\OneDrive\Bilder\Saved Pictures\Geit_3.png')
+geit = pygame.transform.scale(Geit, (170, 169))
+geit_1 = pygame.transform.scale(Geit_1, (170, 169))
+geit_2 = pygame.transform.scale(Geit_2, (170, 169))
+geit_3 = pygame.transform.scale(Geit_3, (170, 169))
+
+
+class MySprite(pygame.sprite.Sprite):
+    def __init__(self):
+        super(MySprite, self).__init__()
+ 
+        self.images = []
+        self.images.append(geit)
+        self.images.append(geit_1)
+        self.images.append(geit_2)
+        self.images.append(geit_3)
+ 
+        self.index = 0
+ 
+        self.image = self.images[self.index]
+ 
+        self.rect = pygame.Rect(225, 400, 150, 198)
+ 
+    def update(self):
+        self.index += 1
+ 
+        if self.index >= len(self.images):
+            self.index = 0
+        
+        self.image = self.images[self.index]
+
+def main():
+    pygame.init()
+    x=0
+    DS = pygame.display.set_mode((W, H))
+    my_sprite = MySprite()
+    my_group = pygame.sprite.Group(my_sprite)
+    clock = pygame.time.Clock()
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+                
+        my_group.update()
+        my_group.draw(DS)
+        pygame.display.update()
+        clock.tick(15)
+
+    
+        rel_x = x % bg_t.get_rect().width
+        DS.blit(bg, (rel_x - bg_t.get_rect().width, 0))
+        if rel_x < W:
+            DS.blit(bg_t, (rel_x, 0))
+        x -= 27
+        pygame.display.update()
+        clock.tick(FPS)
+
+if __name__ == '__main__':
+    main()
