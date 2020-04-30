@@ -1,8 +1,155 @@
-'''
-a)  S'(t)=-b*S(t)I(t) forklarer endringen i antall mulige smittede.
--b*S(t)
+#oppgave 8.20 i prog mod boka s. 171
 
-b)
+'''a) Endringen i mengden som kan bli smittet er mengden personer som blir smitttet av smittede personer.
+-b*S(t) er for en smittet person, så vi må mulitplisere med antall smittede, derav s'(t) = -b*S(t)*I(t)
 
-c)
-'''
+Endringen i de nylig kurerte vil være prosentandelen f mulitplisert med antall smittede I(t). 
+Det blir altså, R'(t) = f*I(t)'''
+
+'''b) I'(t) vil være den negative verdien av summen til S'(t) og R'(t). Dermed vil summen bare bli 0 når
+vi tar summen av alle tre endringene. I'(t) = -(S'(t) + R'(t)) = b*S(t)*I(t)-f*I(t).'''
+
+#Pylab
+import pylab as pyl
+
+#Math
+import math
+
+#c)
+
+#Modellen
+    
+#Konstanter
+Befolkning = 124000
+antall_punkter = 10000
+dager = 10
+h = dager/(antall_punkter - 1)
+b = 2e-5
+f = 0.2
+    
+#Forhåndslagde lister til Eulers Metode
+t = pyl.zeros(antall_punkter)
+
+S = pyl.zeros(antall_punkter)
+I = pyl.zeros(antall_punkter)
+R = pyl.zeros(antall_punkter)
+    
+#Initialbetingelser for S(t) og I(t)
+S[0] = Befolkning - 10
+I[0] = 10
+
+    
+#Eulers Metode
+for j in range(antall_punkter - 1):
+    t[j+1] = t[j] + h
+    
+    S[j+1] = S[j] + (-b*S[j]*I[j]) * h
+    I[j+1] = I[j] + (b*S[j]*I[j] - f*I[j]) * h
+    R[j+1] = R[j] + (f*I[j]) * h
+    
+#Plotter modellen
+pyl.plot(t, S, label='S(t)')
+pyl.plot(t, I, label='I(t)')
+pyl.plot(t, R, label='R(t)')
+    
+#Legger til 'legends', nett og viser modellen
+pyl.legend()
+pyl.xlabel('Dager som har gått')
+pyl.ylabel('Antall mennesker')
+pyl.grid()
+pyl.show()
+
+#d)
+
+def OppgaveD(antall_tidssteg, S0, I0, R0):
+    dager = 10
+    h = dager/(antall_tidssteg - 1)
+    
+    t = pyl.zeros(antall_tidssteg)
+    
+    S = pyl.zeros(antall_tidssteg)
+    I = pyl.zeros(antall_tidssteg)
+    R = pyl.zeros(antall_tidssteg)
+    
+    S[0] = S0
+    I[0] = I0
+    R[0] = R0
+    
+    for j in range(antall_tidssteg - 1):
+        t[j+1] = t[j] + h
+        
+        B = 2*(10**(-5))*(t[j] + 1)*(math.e)**(-0.01*(t[j])**2)
+        
+        if t[j] < 4:
+            F = 0.2
+        if t[j] >= 4:
+            F = 0.4 + 0.5*math.sin(0.6*math.pi*t[j])
+        
+        S[j+1] = S[j] + (-B*S[j]*I[j]) * h
+        I[j+1] = I[j] + (B*S[j]*I[j] - F*I[j]) * h
+        R[j+1] = R[j] + (F*I[j]) * h
+    
+    #Plotter modellen
+    pyl.plot(t, S, label='S(t)')
+    pyl.plot(t, I, label='I(t)')
+    pyl.plot(t, R, label='R(t)')
+    
+    '''
+    #Legger til 'legends', nett og viser modellen
+    pyl.legend()
+    pyl.xlabel('Dager som har gått')
+    pyl.ylabel('Antall mennesker')
+    pyl.grid()
+    pyl.show()'''
+    
+    return t, S, I, R
+    
+    #e)
+
+#Modellen
+    
+#Konstanter
+Befolkning = 124000
+antall_punkter = 10000
+dager = 10
+h = dager/(antall_punkter - 1)
+    
+#Forhåndslagde lister til Eulers Metode
+t = pyl.zeros(antall_punkter)
+
+S = pyl.zeros(antall_punkter)
+I = pyl.zeros(antall_punkter)
+R = pyl.zeros(antall_punkter)
+    
+#Initialbetingelser for S(t) og I(t)
+S[0] = Befolkning - 10
+I[0] = 10
+
+    
+#Eulers Metode
+for j in range(antall_punkter - 1):
+    t[j+1] = t[j] + h
+    
+    b = 2*(10**(-5))*(t[j] + 1)*(math.e)**(-0.01*(t[j])**2)
+    
+    if t[j] < 4:
+        f = 0.2
+    elif t[j] >= 4:
+        f = 0.4 + 0.5*math.sin(0.6*math.pi*t[j])
+    
+    S[j+1] = S[j] + (-b*S[j]*I[j]) * h
+    I[j+1] = I[j] + (b*S[j]*I[j] - f*I[j]) * h
+    R[j+1] = R[j] + (f*I[j]) * h
+ 
+#Plotter modellen
+pyl.plot(t, S, label='S(t)')
+pyl.plot(t, I, label='I(t)')
+pyl.plot(t, R, label='R(t)')
+    
+#Legger til 'legends', nett og viser modellen
+pyl.legend()
+pyl.xlabel('Dager som har gått')
+pyl.ylabel('Antall mennesker')
+pyl.grid()
+pyl.show()
+
