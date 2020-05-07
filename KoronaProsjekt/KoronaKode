@@ -1,1 +1,43 @@
 Her skrives koden til selve innleveringen ned sånn at vi ikke mister den.
+
+
+import numpy as np
+import pylab as pyl
+
+fil = np.loadtxt('Norway_Corona.txt', dtype=int, skiprows=1, delimiter=',')
+
+
+DagerSidenPN = list(fil[:, 0])
+Smittede = list(fil[:, 1])  
+Dødstall = list(fil[:, 2])
+
+
+#Oppgave 4
+'''
+pyl.plot(DagerSidenPN, Smittede, color='darkorchid')
+pyl.title('Norge Corona Utvikling - Smittede')
+pyl.xlabel('Dager siden pasient nr. 0 (25.02.20)')
+pyl.ylabel('Smittede')
+pyl.show()
+
+pyl.plot(DagerSidenPN, Dødstall, color='royalblue')
+pyl.title('Norge Corona Utvikling - Dødstall')
+pyl.xlabel('Dager siden pasient nr. 0 (25.02.20)')
+pyl.ylabel('Dødstall')
+pyl.show()'''
+
+#Oppgave 3
+p1 = np.polyfit(DagerSidenPN, Smittede, 2)
+p2 = np.polyfit(DagerSidenPN, Dødstall, 3)
+
+
+y1 = np.polyval(p1, DagerSidenPN)
+y2 = np.polyval(p2, DagerSidenPN)
+
+pyl.plot(DagerSidenPN, Smittede, 'o')
+pyl.plot(DagerSidenPN, y1)
+pyl.show()
+
+pyl.plot(DagerSidenPN, Dødstall, 'o')
+pyl.plot(DagerSidenPN, y2)
+pyl.show()
